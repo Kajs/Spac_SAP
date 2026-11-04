@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service definition for _stock_dd'
+define service ZR_SPAC103_STOCK_SD {
+  expose ZR_SPAC103_STOCK_DD;
+}
