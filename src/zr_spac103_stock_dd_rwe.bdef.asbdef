@@ -18,4 +18,9 @@ authorization master ( instance )
     ProductId   = product_id;
     Amount      = amount;
   }
+
+  validation validateAmount on save {
+  create;
+  update;
+  }
 }

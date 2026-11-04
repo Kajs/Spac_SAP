@@ -55,7 +55,7 @@ CLASS ZCL_SPAC103_DATA_LOADER IMPLEMENTATION.
       ( warehouse_id = 3 product_id = 3 amount =   8 )
       ( warehouse_id = 1 product_id = 3 amount = 100 )
       ( warehouse_id = 1 product_id = 2 amount =   7 )
-      ( warehouse_id = 2 product_id = 4 amount =   0 )
+      ( warehouse_id = 2 product_id = 4 amount =   -1 )
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 *   Ændr data herover, når du vil fylde data på andre tabeller
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
