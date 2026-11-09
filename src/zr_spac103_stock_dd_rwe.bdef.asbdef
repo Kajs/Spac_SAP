@@ -10,7 +10,7 @@ authorization master ( instance )
   create ( authorization : global );
   update;
   delete;
-  field ( readonly ) WarehouseId, ProductId;
+  field ( readonly : update ) WarehouseId, ProductId;
 
   mapping for zspac103_stock
   {
