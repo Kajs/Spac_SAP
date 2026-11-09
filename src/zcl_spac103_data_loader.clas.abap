@@ -103,10 +103,15 @@ CLASS ZCL_SPAC103_DATA_LOADER IMPLEMENTATION.
     temp_table_p_price = VALUE #(
 
       ( product_id = 1 product_price = '249.95'     product_currency_code = 'DKK' )
+      ( product_id = 1 product_price = '33.42'      product_currency_code = 'EUR' )
       ( product_id = 2 product_price = '19.99'      product_currency_code = 'DKK' )
+      ( product_id = 2 product_price = '2.68'       product_currency_code = 'EUR' )
       ( product_id = 3 product_price = '50.00'      product_currency_code = 'DKK' )
+      ( product_id = 3 product_price = '6.69'       product_currency_code = 'EUR' )
       ( product_id = 4 product_price = '39.99'      product_currency_code = 'DKK' )
+      ( product_id = 4 product_price = '5.35'       product_currency_code = 'EUR' )
       ( product_id = 5 product_price = '149.99'     product_currency_code = 'DKK' )
+      ( product_id = 5 product_price = '20.07'      product_currency_code = 'EUR' )
     ).
 
     TRY.
@@ -126,9 +131,9 @@ CLASS ZCL_SPAC103_DATA_LOADER IMPLEMENTATION.
 
     temp_table_warehou = VALUE #(
 
-      ( warehouse_id = 1 warehouse_address = 'Termogade 23'     warehouse_zipcode = 6700 warehouse_city = 'Esbjerg' warehouse_name = 'Isenkrammeren Esbjerg' )
-      ( warehouse_id = 2 warehouse_address = 'Tykstegsgade 230' warehouse_zipcode = 5000 warehouse_city = 'Odense'  warehouse_name = 'Isenkrammeren Odense' )
-      ( warehouse_id = 3 warehouse_address = 'Kirkestræde 12'   warehouse_zipcode = 5960 warehouse_city = 'Marstal' warehouse_name = 'Isenkrammeren Marstal' )
+      ( warehouse_id = 1 warehouse_address = 'Termogade 23'     warehouse_zipcode = 6700 warehouse_city = 'Esbjerg' warehouse_name = 'Isenkrammeren' )
+      ( warehouse_id = 2 warehouse_address = 'Tykstegsgade 230' warehouse_zipcode = 5000 warehouse_city = 'Odense'  warehouse_name = 'Isenkrammeren' )
+      ( warehouse_id = 3 warehouse_address = 'Kirkestræde 12'   warehouse_zipcode = 5960 warehouse_city = 'Marstal' warehouse_name = 'Isenkrammeren' )
     ).
 
     TRY.

@@ -11,6 +11,12 @@ authorization master ( instance )
   update;
   delete;
   field ( readonly : update ) WarehouseId, ProductId;
+  field ( readonly ) ProductName,
+                   ProductDescription,
+                   WarehouseName,
+                   WarehouseAddress,
+                   WarehouseZipcode,
+                   WarehouseCity;
 
   mapping for zspac103_stock
   {
