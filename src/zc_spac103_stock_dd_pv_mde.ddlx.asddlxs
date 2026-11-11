@@ -1,0 +1,21 @@
+@Metadata.layer: #CUSTOMER
+@UI.createHidden: false
+@UI.deleteHidden: false
+annotate entity ZC_SPAC103_STOCK_DD_PV
+    with
+{
+    @UI.lineItem: [{ position: 10 }]
+    WarehouseId;
+
+    @UI.lineItem: [{ position: 20 }]
+    ProductId;
+
+    @UI.lineItem: [{ position: 30 }]
+    ProductName;
+
+    @UI.lineItem: [{ position: 40 }]
+    Amount;
+
+    @UI.lineItem: [{ position: 50 }]
+    WarehouseName;
+}
