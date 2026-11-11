@@ -9,6 +9,9 @@ define root view entity ZC_SPAC103_STOCK_DD_PV
   key WarehouseId,
   key ProductId,
       Amount,
+      
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
+      LocalLastChangedAt,
 
       ProductName,
       ProductDescription,

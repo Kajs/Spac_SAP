@@ -1,11 +1,18 @@
 managed implementation in class zbp_r_spac103_stock_dd_rwe unique;
 strict ( 2 );
+with draft;
 
 define behavior for ZR_SPAC103_STOCK_DD_RWE //alias <alias_name>
+
 persistent table zspac103_stock
+draft table zdspac103_stock
+
 lock master
+total etag LastChangedAt
+etag master LocalLastChangedAt
+
 authorization master ( instance )
-//etag master <field_name>
+
 {
   create ( authorization : global );
   update;
@@ -16,17 +23,36 @@ authorization master ( instance )
                    WarehouseName,
                    WarehouseAddress,
                    WarehouseZipcode,
-                   WarehouseCity;
+                   WarehouseCity,
+                   LocalCreatedBy,
+                   LocalCreatedAt,
+                   LocalLastChangedBy,
+                   LocalLastChangedAt,
+                   LastChangedAt;
 
   mapping for zspac103_stock
   {
-    WarehouseId = warehouse_id;
-    ProductId   = product_id;
-    Amount      = amount;
+    WarehouseId        = warehouse_id;
+    ProductId          = product_id;
+    Amount             = amount;
+    LocalCreatedBy     = local_created_by;
+    LocalCreatedAt     = local_created_at;
+    LocalLastChangedBy = local_last_changed_by;
+    LocalLastChangedAt = local_last_changed_at;
+    LastChangedAt      = last_changed_at;
   }
 
   validation validateAmount on save {
   create;
   update;
+  }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+
+  draft determine action Prepare {
+    validation validateAmount;
   }
 }
