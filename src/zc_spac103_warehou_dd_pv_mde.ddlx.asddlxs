@@ -1,0 +1,42 @@
+@Metadata.layer: #CUSTOMER
+@UI.createHidden: false
+@UI.deleteHidden: false
+
+annotate entity ZC_SPAC103_WAREHOU_DD_PV
+  with
+{
+  @UI.facet: [
+    {
+      id: 'WarehouseDetails',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'Warehouse Details',
+      position: 10
+    }
+  ]
+
+  @EndUserText.label: 'Warehouse Id'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  WarehouseId;
+
+  @EndUserText.label: 'Warehouse Name'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  WarehouseName;
+
+  @EndUserText.label: 'Address'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  WarehouseAddress;
+
+  @EndUserText.label: 'ZIP Code'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  WarehouseZipcode;
+
+  @EndUserText.label: 'City'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  WarehouseCity;
+}

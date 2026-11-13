@@ -3,4 +3,5 @@ define service ZUI_SPAC103_STOCK_O4 {
   expose ZC_SPAC103_STOCK_DD_PV;
   expose ZC_SPAC103_PRODUCT_DD_PV;
   expose ZC_SPAC103_P_PRICE_PV;
+  expose ZC_SPAC103_WAREHOU_DD_PV;
 }
