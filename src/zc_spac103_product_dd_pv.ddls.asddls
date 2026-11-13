@@ -9,6 +9,9 @@ define root view entity ZC_SPAC103_PRODUCT_DD_PV
   key ProductId,
   ProductName,
   ProductDescription,
-  /* Associations */
+  
+  @Semantics.systemDateTime.localInstanceLastChangedAt: true
+  LocalLastChangedAt,
+  
   _Prices : redirected to composition child ZC_SPAC103_P_PRICE_PV
 }

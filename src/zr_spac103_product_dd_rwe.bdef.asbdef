@@ -1,42 +1,72 @@
 managed implementation in class zbp_r_spac103_product_dd_rwe unique;
 strict ( 2 );
+with draft;
 
 define behavior for ZR_SPAC103_PRODUCT_DD_RWE
 persistent table zspac103_product
+draft table zdspac103_prod
 lock master
+total etag LastChangedAt
+etag master LocalLastChangedAt
 authorization master ( instance )
-//etag master <field_name>
 {
   create ( authorization : global );
   update;
   delete;
+
   field ( mandatory : create, readonly : update ) ProductId;
-  association _Prices { create; }
+
+  field ( readonly ) LocalCreatedBy,
+                     LocalCreatedAt,
+                     LocalLastChangedBy,
+                     LocalLastChangedAt,
+                     LastChangedAt;
+
+  association _Prices { create; with draft; }
 
   mapping for zspac103_product
   {
-    ProductId           = product_id;
-    ProductName         = product_name;
-    ProductDescription  = product_description;
+    ProductId = product_id;
+    ProductName = product_name;
+    ProductDescription = product_description;
+    LocalCreatedBy = localcreatedby;
+    LocalCreatedAt = localcreatedat;
+    LocalLastChangedBy = locallastchangedby;
+    LocalLastChangedAt = locallastchangedat;
+    LastChangedAt = lastchangedat;
   }
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+
+  draft determine action Prepare;
 }
 
-define behavior for ZR_SPAC103_P_PRICE //alias <alias_name>
+
+define behavior for ZR_SPAC103_P_PRICE
 persistent table zspac103_p_price
+draft table zdspac103_price
 lock dependent by _Product
 authorization dependent by _Product
-//etag master <field_name>
+etag master LocalLastChangedAt
 {
   update;
   delete;
-  field ( readonly ) ProductId;
+
+  field ( readonly ) ProductId,
+                     LocalLastChangedAt;
+
   field ( mandatory : create, readonly : update ) ProductCurrencyCode;
-  association _Product;
+
+  association _Product { with draft; }
 
   mapping for zspac103_p_price
   {
-    ProductId           = product_id;
+    ProductId = product_id;
     ProductCurrencyCode = product_currency_code;
     ProductPrice = product_price;
+    LocalLastChangedAt = locallastchangedat;
   }
 }

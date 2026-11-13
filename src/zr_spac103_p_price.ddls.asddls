@@ -12,5 +12,7 @@ association to parent ZR_SPAC103_PRODUCT_DD_RWE as _Product
   key product_currency_code as ProductCurrencyCode,
   @Semantics.amount.currencyCode: 'ProductCurrencyCode'
   product_price as ProductPrice,
+  @Semantics.systemDateTime.localInstanceLastChangedAt: true
+  locallastchangedat as LocalLastChangedAt,
   _Product
 }
