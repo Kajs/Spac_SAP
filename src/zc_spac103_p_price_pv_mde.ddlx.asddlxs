@@ -1,0 +1,16 @@
+@Metadata.layer: #CUSTOMER
+
+@UI.createHidden: false
+@UI.deleteHidden: false
+
+annotate entity ZC_SPAC103_P_PRICE_PV
+  with
+{
+  @EndUserText.label: 'Product Currency'
+  @UI.lineItem: [{ position: 10 }]
+  ProductCurrencyCode;
+
+  @EndUserText.label: 'Price'
+  @UI.lineItem: [{ position: 20 }]
+  ProductPrice;
+}

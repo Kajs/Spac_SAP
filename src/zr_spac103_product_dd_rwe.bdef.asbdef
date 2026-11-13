@@ -1,0 +1,42 @@
+managed implementation in class zbp_r_spac103_product_dd_rwe unique;
+strict ( 2 );
+
+define behavior for ZR_SPAC103_PRODUCT_DD_RWE
+persistent table zspac103_product
+lock master
+authorization master ( instance )
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( mandatory : create, readonly : update ) ProductId;
+  association _Prices { create; }
+
+  mapping for zspac103_product
+  {
+    ProductId           = product_id;
+    ProductName         = product_name;
+    ProductDescription  = product_description;
+  }
+}
+
+define behavior for ZR_SPAC103_P_PRICE //alias <alias_name>
+persistent table zspac103_p_price
+lock dependent by _Product
+authorization dependent by _Product
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) ProductId;
+  field ( mandatory : create, readonly : update ) ProductCurrencyCode;
+  association _Product;
+
+  mapping for zspac103_p_price
+  {
+    ProductId           = product_id;
+    ProductCurrencyCode = product_currency_code;
+    ProductPrice = product_price;
+  }
+}
