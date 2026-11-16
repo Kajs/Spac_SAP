@@ -41,11 +41,13 @@ authorization master ( instance )
   draft action Discard;
   draft action Resume;
 
-  draft determine action Prepare;
+  draft determine action Prepare {
+    validation Price~validatePrice;
+  }
 }
 
 
-define behavior for ZR_SPAC103_P_PRICE
+define behavior for ZR_SPAC103_P_PRICE alias Price
 persistent table zspac103_p_price
 draft table zdspac103_price
 lock dependent by _Product
@@ -68,5 +70,10 @@ etag master LocalLastChangedAt
     ProductCurrencyCode = product_currency_code;
     ProductPrice = product_price;
     LocalLastChangedAt = locallastchangedat;
+  }
+
+  validation validatePrice on save {
+    create;
+    field ProductCurrencyCode, ProductPrice;
   }
 }

@@ -12,7 +12,8 @@ ENDCLASS.
 
 
 
-CLASS zcl_spac103_rap_tester IMPLEMENTATION.
+CLASS ZCL_SPAC103_RAP_TESTER IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -117,5 +118,4 @@ CLASS zcl_spac103_rap_tester IMPLEMENTATION.
     ENDIF.
 
   ENDMETHOD.
-
 ENDCLASS.

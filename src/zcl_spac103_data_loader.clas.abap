@@ -18,7 +18,9 @@ CLASS ZCL_SPAC103_DATA_LOADER DEFINITION
 ENDCLASS.
 
 
+
 CLASS ZCL_SPAC103_DATA_LOADER IMPLEMENTATION.
+
 
   METHOD if_oo_adt_classrun~main.
 
@@ -148,6 +150,7 @@ CLASS ZCL_SPAC103_DATA_LOADER IMPLEMENTATION.
       |\nInserted { warehou_inserted } entries into zspac103_warehou.|.
 
   ENDMETHOD.
+
 
   METHOD cleanup.
 

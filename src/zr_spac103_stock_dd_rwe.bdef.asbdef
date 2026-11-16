@@ -47,6 +47,10 @@ authorization master ( instance )
   update;
   }
 
+  validation validateReferences on save {
+  create;
+  }
+
   draft action Edit;
   draft action Activate optimized;
   draft action Discard;
@@ -54,5 +58,6 @@ authorization master ( instance )
 
   draft determine action Prepare {
     validation validateAmount;
+    validation validateReferences;
   }
 }
