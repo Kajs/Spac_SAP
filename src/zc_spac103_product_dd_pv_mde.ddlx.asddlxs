@@ -1,6 +1,23 @@
 @Metadata.layer: #CUSTOMER
 @UI.createHidden: false
 @UI.deleteHidden: false
+
+@UI: {
+  headerInfo: {
+    typeName: 'Product',
+    typeNamePlural: 'Products',
+    imageUrl: 'ProductImage',
+    title: {
+      type: #STANDARD,
+      value: 'ProductName'
+    },
+    description: {
+      type: #STANDARD,
+      value: 'ProductDescription'
+    }
+  }
+}
+
 annotate entity ZC_SPAC103_PRODUCT_DD_PV
   with 
 {
@@ -36,5 +53,15 @@ annotate entity ZC_SPAC103_PRODUCT_DD_PV
     @UI.lineItem: [{ position: 30 }]
     @UI.identification: [{ position: 30 }]
     ProductDescription;
+    
+    @EndUserText.label: 'Product Image'
+    @UI.identification: [{ position: 40 }]
+    ProductImage;
+    
+    @UI.hidden: true
+    ImageMimeType;
+    
+    @UI.hidden: true
+    ImageFileName;
   
 }

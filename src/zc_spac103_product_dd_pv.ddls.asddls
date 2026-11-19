@@ -10,6 +10,10 @@ define root view entity ZC_SPAC103_PRODUCT_DD_PV
   ProductName,
   ProductDescription,
   
+  ProductImage,
+  ImageMimeType,
+  ImageFileName,
+  
   @Semantics.systemDateTime.localInstanceLastChangedAt: true
   LocalLastChangedAt,
   

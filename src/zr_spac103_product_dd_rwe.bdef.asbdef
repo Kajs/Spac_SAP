@@ -29,6 +29,11 @@ authorization master ( instance )
     ProductId = product_id;
     ProductName = product_name;
     ProductDescription = product_description;
+
+    ProductImage = product_image;
+    ImageMimeType = image_mime_type;
+    ImageFileName = image_file_name;
+
     LocalCreatedBy = localcreatedby;
     LocalCreatedAt = localcreatedat;
     LocalLastChangedBy = locallastchangedby;
