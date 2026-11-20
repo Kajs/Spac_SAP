@@ -1,0 +1,4 @@
+@EndUserText.label: 'Service definition for product catalog'
+define service ZUI_SPAC103_PRODUCT_CAT_SD {
+  expose ZC_SPAC103_PRODUCT_CAT_PV as Product;
+}
