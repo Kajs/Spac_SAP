@@ -181,6 +181,7 @@ CLASS lhc_Cart IMPLEMENTATION.
             (
               CartUUID = key-%tky-CartUUID
               ProductId = key-%param-ProductId
+              %is_draft = key-%tky-%is_draft
             )
           )
         RESULT DATA(existing_items).
@@ -193,8 +194,7 @@ CLASS lhc_Cart IMPLEMENTATION.
             UPDATE FIELDS ( Quantity )
             WITH VALUE #(
               (
-                CartUUID = key-%tky-CartUUID
-                ProductId = key-%param-ProductId
+                %tky = existing_items[ 1 ]-%tky
                 Quantity = existing_items[ 1 ]-Quantity
                          + key-%param-Quantity
               )
