@@ -17,7 +17,7 @@ use etag
   use action Resume;
   use action Prepare;
 
-  use association _Items { create; with draft; }
+  use association _Items { with draft; }
 }
 
 

@@ -51,6 +51,7 @@ CLASS lhc_Cart IMPLEMENTATION.
         WITH CORRESPONDING #( keys )
       RESULT DATA(carts).
 
+    DATA cid_counter TYPE i VALUE 0.
     LOOP AT keys INTO DATA(key).
 
       " Find the corresponding cart
@@ -99,6 +100,26 @@ CLASS lhc_Cart IMPLEMENTATION.
         ) TO reported-cart.
 
         CONTINUE.
+      ENDIF.
+
+      " Validate product id
+      IF key-%param-ProductId IS INITIAL.
+        APPEND VALUE #(
+          %tky = key-%tky
+          %fail-cause = if_abap_behv=>cause-unspecific
+        ) TO failed-cart.
+
+        APPEND VALUE #(
+          %tky = key-%tky
+          %msg = new_message_with_text(
+            severity = if_abap_behv_message=>severity-error
+            text = 'Please select a product.'
+          )
+          %action-AddProduct = if_abap_behv=>mk-on
+        ) TO reported-cart.
+
+        CONTINUE.
+
       ENDIF.
 
       " Check that the product exists
@@ -179,9 +200,11 @@ CLASS lhc_Cart IMPLEMENTATION.
               )
             ).
 
-      ELSE.
+       ELSE.
 
         " Create a new cart item through the cart composition
+        cid_counter = cid_counter + 1.
+
         MODIFY ENTITIES OF zr_spac103_cart_dd_rwe IN LOCAL MODE
           ENTITY Cart
             CREATE BY \_Items
@@ -194,9 +217,14 @@ CLASS lhc_Cart IMPLEMENTATION.
             )
             WITH VALUE #(
               (
-                %tky = key-%tky
+                CartUUID = key-%tky-CartUUID
+                %is_draft = key-%tky-%is_draft
+
                 %target = VALUE #(
                   (
+                    %cid = |NEW_ITEM_{ cid_counter }|
+                    %is_draft = key-%tky-%is_draft
+
                     ProductId = key-%param-ProductId
                     ProductName = product_name
                     Quantity = key-%param-Quantity
