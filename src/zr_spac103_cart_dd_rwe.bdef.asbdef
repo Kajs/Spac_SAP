@@ -30,6 +30,7 @@ authorization master ( none )
 
   determination setInitialValues on modify { create; }
   action AddProduct parameter ZA_SPAC103_ADD_PRODUCT result [1] $self;
+  action ( features : instance ) Checkout result [1] $self;
 
   association _Items { create; with draft; }
 

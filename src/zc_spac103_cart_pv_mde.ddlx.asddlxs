@@ -45,6 +45,12 @@ annotate entity ZC_SPAC103_CART_PV
       dataAction: 'AddProduct',
       label: 'Add Product',
       position: 50
+    },
+    {
+      type: #FOR_ACTION,
+      dataAction: 'Checkout',
+      label: 'Checkout',
+      position: 60
     }
   ]
   CartUUID;

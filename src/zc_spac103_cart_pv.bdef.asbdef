@@ -10,6 +10,7 @@ use etag
   use delete;
 
   use action AddProduct;
+  use action Checkout;
 
   use action Edit;
   use action Activate;
