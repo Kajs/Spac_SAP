@@ -1,0 +1,6 @@
+@EndUserText.label: 'Product catalog query service'
+define service ZUI_SPAC103_PRODUCT_Q_SD {
+  expose ZC_SPAC103_PRODUCT_CAT_FQ as ProductByCurrency;
+  expose ZC_SPAC103_CART_PV        as ShoppingCart;
+  expose ZC_SPAC103_CITEM_PV       as ShoppingCartItem;
+}

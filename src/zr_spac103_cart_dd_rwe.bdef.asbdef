@@ -1,0 +1,107 @@
+managed implementation in class zbp_r_spac103_cart_dd_rwe unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZR_SPAC103_CART_DD_RWE alias Cart
+persistent table zspac103_cart
+draft table zdspac103_cart
+lock master total etag LastChangedAt
+etag master LocalLastChangedAt
+authorization master ( none )
+{
+  create;
+  update;
+  delete;
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  field ( numbering : managed, readonly ) CartUUID;
+  field ( readonly : update ) CurrencyCode;
+
+  field ( readonly ) CartStatus,
+                     LocalCreatedBy,
+                     LocalCreatedAt,
+                     LocalLastChangedBy,
+                     LocalLastChangedAt,
+                     LastChangedAt;
+
+  determination setInitialValues on modify { create; }
+  action AddProduct parameter ZA_SPAC103_ADD_PRODUCT result [1] $self;
+
+  association _Items { create; with draft; }
+
+  mapping for zspac103_cart
+  {
+    CartUUID            = cart_uuid;
+    CurrencyCode        = currency_code;
+    CartStatus          = cart_status;
+    LocalCreatedBy      = local_created_by;
+    LocalCreatedAt      = local_created_at;
+    LocalLastChangedBy  = local_last_changed_by;
+    LocalLastChangedAt  = local_last_changed_at;
+    LastChangedAt       = last_changed_at;
+  }
+}
+
+
+define behavior for ZR_SPAC103_CITEM alias Item
+persistent table zspac103_citem
+draft table zdspac103_citem
+lock dependent by _Cart
+etag dependent by _Cart
+authorization dependent by _Cart
+{
+  update;
+  delete;
+
+  field ( readonly ) CartUUID,
+                     ProductName,
+                     CurrencyCode,
+                     UnitPrice;
+
+  field ( mandatory : create, readonly : update ) ProductId;
+  field ( mandatory : create ) Quantity;
+
+  association _Cart { with draft; }
+  association _Allocations { create; with draft; }
+
+  mapping for zspac103_citem
+  {
+    CartUUID     = cart_uuid;
+    ProductId    = product_id;
+    ProductName  = product_name;
+    Quantity     = quantity;
+    CurrencyCode = currency_code;
+    UnitPrice    = unit_price;
+  }
+}
+
+
+define behavior for ZR_SPAC103_STALLOC alias Allocation
+persistent table zspac103_stalloc
+draft table zdspac103_staloc
+lock dependent by _Cart
+etag dependent by _Cart
+authorization dependent by _Cart
+{
+  internal update;
+  internal delete;
+  field ( readonly ) CartUUID,
+                     ProductId,
+                     WarehouseId,
+                     AllocatedQuantity;
+
+  association _Item { with draft; }
+  association _Cart { with draft; }
+
+  mapping for zspac103_stalloc
+  {
+    CartUUID          = cart_uuid;
+    ProductId         = product_id;
+    WarehouseId       = warehouse_id;
+    AllocatedQuantity = allocated_quantity;
+  }
+}
