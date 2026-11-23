@@ -1,5 +1,6 @@
 projection;
 strict ( 2 );
+use draft;
 
 define behavior for ZC_SPAC103_CART_PV alias Cart
 use etag
@@ -10,7 +11,13 @@ use etag
 
   use action AddProduct;
 
-  use association _Items { create; }
+  use action Edit;
+  use action Activate;
+  use action Discard;
+  use action Resume;
+  use action Prepare;
+
+  use association _Items { create; with draft; }
 }
 
 
@@ -20,5 +27,5 @@ use etag
   use update;
   use delete;
 
-  use association _Cart;
+  use association _Cart { with draft; }
 }

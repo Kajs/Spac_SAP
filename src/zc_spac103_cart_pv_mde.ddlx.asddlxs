@@ -1,0 +1,58 @@
+@Metadata.layer: #CUSTOMER
+
+@UI: {
+  headerInfo: {
+    typeName: 'Shopping Cart',
+    typeNamePlural: 'Shopping Carts',
+    title: {
+      type: #STANDARD,
+      value: 'CartUUID'
+    },
+    description: {
+      type: #STANDARD,
+      value: 'CartStatus'
+    }
+  }
+}
+
+annotate entity ZC_SPAC103_CART_PV
+  with
+{
+  @UI.facet: [
+    {
+      id: 'CartDetails',
+      purpose: #STANDARD,
+      type: #IDENTIFICATION_REFERENCE,
+      label: 'Cart Details',
+      position: 10
+    },
+    {
+      id: 'CartItems',
+      purpose: #STANDARD,
+      type: #LINEITEM_REFERENCE,
+      label: 'Items',
+      position: 20,
+      targetElement: '_Items'
+    }
+  ]
+
+  @EndUserText.label: 'Cart ID'
+  @UI.lineItem: [{ position: 10 }]
+  @UI.identification: [{ position: 10 }]
+  CartUUID;
+
+  @EndUserText.label: 'Currency'
+  @UI.lineItem: [{ position: 20 }]
+  @UI.identification: [{ position: 20 }]
+  CurrencyCode;
+
+  @EndUserText.label: 'Status'
+  @UI.lineItem: [{ position: 30 }]
+  @UI.identification: [{ position: 30 }]
+  CartStatus;
+
+  @EndUserText.label: 'Created At'
+  @UI.lineItem: [{ position: 40 }]
+  LocalCreatedAt;
+
+}
