@@ -9,6 +9,9 @@ define view entity ZR_SPAC103_CITEM
   association to parent ZR_SPAC103_CART_DD_RWE as _Cart
   on $projection.CartUUID = _Cart.CartUUID
   
+  association [0..1] to ZR_SPAC103_PRODUCT_DD_RWE as _Product
+  on $projection.ProductId = _Product.ProductId
+  
   composition [0..*] of ZR_SPAC103_STALLOC as _Allocations
 {
   key cart_uuid as CartUUID,
@@ -24,5 +27,6 @@ define view entity ZR_SPAC103_CITEM
       cart_unit_total as CartUnitTotal,
       
       _Cart,
-      _Allocations
+      _Allocations,
+      _Product
 }
