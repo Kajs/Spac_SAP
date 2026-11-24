@@ -9,6 +9,7 @@ define root view entity ZC_SPAC103_CART_PV
   key CartUUID,
 
       CurrencyCode,
+      CartTotalAmount,
       CartStatus,
       LocalCreatedBy,
       LocalCreatedAt,

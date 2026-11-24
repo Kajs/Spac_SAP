@@ -22,6 +22,7 @@ authorization master ( none )
   field ( readonly : update ) CurrencyCode;
 
   field ( readonly ) CartStatus,
+                     CartTotalAmount,
                      LocalCreatedBy,
                      LocalCreatedAt,
                      LocalLastChangedBy,
@@ -38,6 +39,7 @@ authorization master ( none )
   {
     CartUUID            = cart_uuid;
     CurrencyCode        = currency_code;
+    CartTotalAmount     = cart_total_amount;
     CartStatus          = cart_status;
     LocalCreatedBy      = local_created_by;
     LocalCreatedAt      = local_created_at;
@@ -61,10 +63,22 @@ authorization dependent by _Cart
   field ( readonly ) CartUUID,
                      ProductName,
                      CurrencyCode,
-                     UnitPrice;
+                     UnitPrice,
+                     CartUnitTotal;
 
   field ( mandatory : create, readonly : update ) ProductId;
   field ( mandatory : create ) Quantity;
+  determination CalculateCartUnitTotal on modify
+  {
+      create;
+      field Quantity, UnitPrice;
+  }
+
+  determination CalculateCartTotalAmount on modify
+  {
+      create;
+      field Quantity, UnitPrice;
+  }
 
   association _Cart { with draft; }
   association _Allocations { create; with draft; }
@@ -77,6 +91,7 @@ authorization dependent by _Cart
     Quantity     = quantity;
     CurrencyCode = currency_code;
     UnitPrice    = unit_price;
+    CartUnitTotal = cart_unit_total;
   }
 }
 

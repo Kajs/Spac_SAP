@@ -11,6 +11,8 @@ define root view entity ZR_SPAC103_CART_DD_RWE
   key cart_uuid as CartUUID,
 
       currency_code as CurrencyCode,
+      @Semantics.amount.currencyCode: 'CurrencyCode'
+      cart_total_amount as CartTotalAmount,
       cart_status as CartStatus,
 
       @Semantics.user.createdBy: true

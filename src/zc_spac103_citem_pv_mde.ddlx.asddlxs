@@ -17,6 +17,11 @@ annotate entity ZC_SPAC103_CITEM_PV
   @UI.lineItem: [{ position: 30 }]
   @UI.identification: [{ position: 30 }]
   UnitPrice;
+  
+  @EndUserText.label: 'Line Total'
+  @UI.lineItem: [{ position: 40 }]
+  @UI.identification: [{ position: 40 }]
+  LineTotal;
 
   @UI.hidden: true
   ProductId;

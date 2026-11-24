@@ -1,3 +1,83 @@
+CLASS lhc_item DEFINITION INHERITING FROM cl_abap_behavior_handler.
+
+  PRIVATE SECTION.
+
+    METHODS CalculateCartUnitTotal FOR DETERMINE ON MODIFY
+      keys FOR Item~CalculateCartUnitTotal.
+    METHODS CalculateCartTotalAmount FOR DETERMINE ON MODIFY
+      keys FOR Item~CalculateCartTotalAmount.
+
+ENDCLASS.
+
+CLASS lhc_item IMPLEMENTATION.
+
+  METHOD CalculateCartUnitTotal.
+
+    READ ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
+      ENTITY Item
+      FIELDS ( Quantity UnitPrice )
+      WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_items).
+
+    MODIFY ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
+      ENTITY Item
+      UPDATE FIELDS ( CartUnitTotal )
+      WITH VALUE #(
+        FOR ls_item IN lt_items
+        (
+          %tky = ls_item-%tky
+          CartUnitTotal = ls_item-UnitPrice * ls_item-Quantity
+        )
+      ).
+
+  ENDMETHOD.
+
+  METHOD CalculateCartTotalAmount.
+
+    " Find the carts belonging to the changed items
+    READ ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
+      ENTITY Item BY \_Cart
+      FIELDS ( CartUUID )
+      WITH CORRESPONDING #( keys )
+      RESULT DATA(lt_carts).
+
+    " Avoid processing the same cart more than once
+    SORT lt_carts BY CartUUID.
+    DELETE ADJACENT DUPLICATES FROM lt_carts COMPARING CartUUID.
+
+    " Calculate the total amount for each cart
+    LOOP AT lt_carts INTO DATA(ls_cart).
+
+      READ ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
+        ENTITY Cart BY \_Items
+        FIELDS ( UnitPrice Quantity )
+        WITH VALUE #( ( %tky = ls_cart-%tky ) )
+        RESULT DATA(lt_cart_items).
+
+      DATA lv_cart_total TYPE zspac103_cart-cart_total_amount.
+      CLEAR lv_cart_total.
+
+      LOOP AT lt_cart_items INTO DATA(ls_cart_item).
+        lv_cart_total = lv_cart_total
+                      + ( ls_cart_item-UnitPrice * ls_cart_item-Quantity ).
+      ENDLOOP.
+
+      MODIFY ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
+        ENTITY Cart
+        UPDATE FIELDS ( CartTotalAmount )
+        WITH VALUE #(
+          (
+            %tky = ls_cart-%tky
+            CartTotalAmount = lv_cart_total
+          )
+        ).
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
 CLASS lhc_Cart DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 

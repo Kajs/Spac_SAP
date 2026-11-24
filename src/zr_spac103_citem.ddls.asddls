@@ -8,6 +8,7 @@ define view entity ZR_SPAC103_CITEM
   
   association to parent ZR_SPAC103_CART_DD_RWE as _Cart
   on $projection.CartUUID = _Cart.CartUUID
+  
   composition [0..*] of ZR_SPAC103_STALLOC as _Allocations
 {
   key cart_uuid as CartUUID,
@@ -19,6 +20,8 @@ define view entity ZR_SPAC103_CITEM
 
       @Semantics.amount.currencyCode: 'CurrencyCode'
       unit_price as UnitPrice,
+      @Semantics.amount.currencyCode: 'CurrencyCode'
+      cart_unit_total as CartUnitTotal,
       
       _Cart,
       _Allocations

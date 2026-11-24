@@ -12,6 +12,7 @@ define view entity ZC_SPAC103_CITEM_PV
       Quantity,
       CurrencyCode,
       UnitPrice,
+      CartUnitTotal,
 
       _Cart : redirected to parent ZC_SPAC103_CART_PV
 }
