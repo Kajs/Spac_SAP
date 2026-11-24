@@ -14,6 +14,7 @@ define root view entity ZC_SPAC103_CART_PV
       LocalCreatedBy,
       LocalCreatedAt,
       LocalLastChangedBy,
+      @Semantics.systemDateTime.localInstanceLastChangedAt: true
       LocalLastChangedAt,
       LastChangedAt,
 

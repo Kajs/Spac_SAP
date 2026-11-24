@@ -68,5 +68,10 @@ annotate entity ZC_SPAC103_CART_PV
   @EndUserText.label: 'Created At'
   @UI.lineItem: [{ position: 40 }]
   LocalCreatedAt;
+  
+  @EndUserText.label: 'Cart Total'
+  @UI.lineItem: [{ position: 50 }]
+  @UI.identification: [{ position: 50 }]
+  CartTotalAmount;
 
 }

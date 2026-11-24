@@ -30,6 +30,11 @@ authorization master ( none )
                      LastChangedAt;
 
   determination setInitialValues on modify { create; }
+
+  side effects {
+    action AddProduct affects entity _Items;
+  }
+
   action AddProduct parameter ZA_SPAC103_ADD_PRODUCT result [1] $self;
   action ( features : instance ) Checkout result [1] $self;
 
@@ -78,6 +83,17 @@ authorization dependent by _Cart
   {
       create;
       field Quantity, UnitPrice;
+  }
+  determination CalculateCartTotalAmountOnSave on save
+  {
+      create;
+      update;
+      delete;
+  }
+
+  side effects {
+    field Quantity affects field CartUnitTotal,
+                          field _Cart.CartTotalAmount;
   }
 
   association _Cart { with draft; }

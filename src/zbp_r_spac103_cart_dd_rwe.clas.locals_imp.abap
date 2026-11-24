@@ -2,10 +2,25 @@ CLASS lhc_item DEFINITION INHERITING FROM cl_abap_behavior_handler.
 
   PRIVATE SECTION.
 
+    TYPES: BEGIN OF ty_cart_key,
+             cart_uuid TYPE zspac103_cart-cart_uuid,
+             is_draft  TYPE abap_bool,
+           END OF ty_cart_key.
+
+    TYPES tt_cart_keys TYPE STANDARD TABLE OF ty_cart_key
+      WITH EMPTY KEY.
+
     METHODS CalculateCartUnitTotal FOR DETERMINE ON MODIFY
       keys FOR Item~CalculateCartUnitTotal.
+
     METHODS CalculateCartTotalAmount FOR DETERMINE ON MODIFY
       keys FOR Item~CalculateCartTotalAmount.
+
+    METHODS CalculateCartTotalAmountOnSave FOR DETERMINE ON SAVE
+      keys FOR Item~CalculateCartTotalAmountOnSave.
+
+    METHODS RecalculateCartTotal
+      IMPORTING it_cart_keys TYPE tt_cart_keys.
 
 ENDCLASS.
 
@@ -42,35 +57,105 @@ CLASS lhc_item IMPLEMENTATION.
       RESULT DATA(lt_carts).
 
     " Avoid processing the same cart more than once
-    SORT lt_carts BY CartUUID.
-    DELETE ADJACENT DUPLICATES FROM lt_carts COMPARING CartUUID.
+    SORT lt_carts BY CartUUID %is_draft.
+    DELETE ADJACENT DUPLICATES FROM lt_carts
+      COMPARING CartUUID %is_draft.
 
-    " Calculate the total amount for each cart
-    LOOP AT lt_carts INTO DATA(ls_cart).
+    " Convert RAP results to our local helper table type
+    DATA(lt_cart_keys) = VALUE tt_cart_keys(
+      FOR ls_cart IN lt_carts
+      (
+        cart_uuid = ls_cart-CartUUID
+        is_draft = xsdbool(
+          ls_cart-%is_draft = if_abap_behv=>mk-on
+        )
+      )
+    ).
 
+    RecalculateCartTotal(
+      it_cart_keys = lt_cart_keys
+    ).
+
+  ENDMETHOD.
+
+  METHOD CalculateCartTotalAmountOnSave.
+
+    " Build cart keys directly from the item keys
+    " This also works when the item itself has been deleted
+    DATA(lt_cart_keys) = VALUE tt_cart_keys(
+      FOR ls_key IN keys
+      (
+        cart_uuid = ls_key-CartUUID
+        is_draft = xsdbool(
+          ls_key-%is_draft = if_abap_behv=>mk-on
+        )
+      )
+    ).
+
+    " Avoid processing the same cart more than once
+    SORT lt_cart_keys BY cart_uuid is_draft.
+    DELETE ADJACENT DUPLICATES FROM lt_cart_keys
+      COMPARING cart_uuid is_draft.
+
+    RecalculateCartTotal(
+      it_cart_keys = lt_cart_keys
+    ).
+
+  ENDMETHOD.
+
+  METHOD RecalculateCartTotal.
+
+    LOOP AT it_cart_keys INTO DATA(ls_cart_key).
+
+      " Find the cart using its key and draft status
       READ ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
-        ENTITY Cart BY \_Items
-        FIELDS ( UnitPrice Quantity )
-        WITH VALUE #( ( %tky = ls_cart-%tky ) )
-        RESULT DATA(lt_cart_items).
-
-      DATA lv_cart_total TYPE zspac103_cart-cart_total_amount.
-      CLEAR lv_cart_total.
-
-      LOOP AT lt_cart_items INTO DATA(ls_cart_item).
-        lv_cart_total = lv_cart_total
-                      + ( ls_cart_item-UnitPrice * ls_cart_item-Quantity ).
-      ENDLOOP.
-
-      MODIFY ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
         ENTITY Cart
-        UPDATE FIELDS ( CartTotalAmount )
+        FIELDS ( CartUUID )
         WITH VALUE #(
           (
-            %tky = ls_cart-%tky
-            CartTotalAmount = lv_cart_total
+            CartUUID = ls_cart_key-cart_uuid
+            %is_draft = COND #(
+              WHEN ls_cart_key-is_draft = abap_true
+              THEN if_abap_behv=>mk-on
+              ELSE if_abap_behv=>mk-off
+            )
           )
-        ).
+        )
+        RESULT DATA(lt_cart).
+
+      LOOP AT lt_cart INTO DATA(ls_cart).
+
+        " Read all items belonging to this cart
+        READ ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
+          ENTITY Cart BY \_Items
+          FIELDS ( UnitPrice Quantity )
+          WITH VALUE #( ( %tky = ls_cart-%tky ) )
+          RESULT DATA(lt_cart_items).
+
+        " Calculate the total amount
+        DATA lv_cart_total TYPE zspac103_cart-cart_total_amount.
+        CLEAR lv_cart_total.
+
+        LOOP AT lt_cart_items INTO DATA(ls_cart_item).
+
+          lv_cart_total = lv_cart_total
+                        + ( ls_cart_item-UnitPrice
+                        * ls_cart_item-Quantity ).
+
+        ENDLOOP.
+
+        " Update the cart
+        MODIFY ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
+          ENTITY Cart
+          UPDATE FIELDS ( CartTotalAmount )
+          WITH VALUE #(
+            (
+              %tky = ls_cart-%tky
+              CartTotalAmount = lv_cart_total
+            )
+          ).
+
+      ENDLOOP.
 
     ENDLOOP.
 
