@@ -33,6 +33,7 @@ authorization master ( none )
 
   side effects {
     action AddProduct affects entity _Items;
+    entity _Items affects $self;
   }
 
   action AddProduct parameter ZA_SPAC103_ADD_PRODUCT result [1] $self;
@@ -62,8 +63,8 @@ lock dependent by _Cart
 etag dependent by _Cart
 authorization dependent by _Cart
 {
-  update;
-  delete;
+  update ( features : instance );
+  delete ( features : instance );
 
   field ( readonly ) CartUUID,
                      ProductName,
@@ -82,6 +83,7 @@ authorization dependent by _Cart
   determination CalculateCartTotalAmount on modify
   {
       create;
+      delete;
       field Quantity, UnitPrice;
   }
   determination CalculateCartTotalAmountOnSave on save

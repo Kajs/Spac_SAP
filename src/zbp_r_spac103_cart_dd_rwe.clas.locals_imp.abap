@@ -22,6 +22,10 @@ CLASS lhc_item DEFINITION INHERITING FROM cl_abap_behavior_handler.
     METHODS RecalculateCartTotal
       IMPORTING it_cart_keys TYPE tt_cart_keys.
 
+    METHODS get_instance_features FOR INSTANCE FEATURES
+      IMPORTING keys REQUEST requested_features
+      FOR Item RESULT result.
+
 ENDCLASS.
 
 CLASS lhc_item IMPLEMENTATION.
@@ -49,28 +53,21 @@ CLASS lhc_item IMPLEMENTATION.
 
   METHOD CalculateCartTotalAmount.
 
-    " Find the carts belonging to the changed items
-    READ ENTITIES OF ZR_SPAC103_CART_DD_RWE IN LOCAL MODE
-      ENTITY Item BY \_Cart
-      FIELDS ( CartUUID )
-      WITH CORRESPONDING #( keys )
-      RESULT DATA(lt_carts).
-
-    " Avoid processing the same cart more than once
-    SORT lt_carts BY CartUUID %is_draft.
-    DELETE ADJACENT DUPLICATES FROM lt_carts
-      COMPARING CartUUID %is_draft.
-
-    " Convert RAP results to our local helper table type
+    " Build cart keys directly from the item keys
     DATA(lt_cart_keys) = VALUE tt_cart_keys(
-      FOR ls_cart IN lt_carts
+      FOR ls_key IN keys
       (
-        cart_uuid = ls_cart-CartUUID
+        cart_uuid = ls_key-CartUUID
         is_draft = xsdbool(
-          ls_cart-%is_draft = if_abap_behv=>mk-on
+          ls_key-%is_draft = if_abap_behv=>mk-on
         )
       )
     ).
+
+    " Avoid processing the same cart more than once
+    SORT lt_cart_keys BY cart_uuid is_draft.
+    DELETE ADJACENT DUPLICATES FROM lt_cart_keys
+      COMPARING cart_uuid is_draft.
 
     RecalculateCartTotal(
       it_cart_keys = lt_cart_keys
@@ -156,6 +153,59 @@ CLASS lhc_item IMPLEMENTATION.
           ).
 
       ENDLOOP.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+  METHOD get_instance_features.
+
+    " Read the parent cart for each item, including the link
+    " between the item and its parent cart.
+    READ ENTITIES OF zr_spac103_cart_dd_rwe IN LOCAL MODE
+      ENTITY Item BY \_Cart
+        FIELDS ( CartStatus )
+        WITH CORRESPONDING #( keys )
+      RESULT DATA(carts)
+      LINK DATA(cart_links).
+
+    LOOP AT keys INTO DATA(key).
+
+      " Default to disabled if the parent cart cannot be found.
+      DATA(can_modify) = abap_false.
+
+      " Find the parent cart associated with this particular item.
+      LOOP AT cart_links INTO DATA(cart_link).
+
+        IF cart_link-source-%tky = key-%tky.
+
+          READ TABLE carts INTO DATA(cart)
+            WITH TABLE KEY id COMPONENTS
+              %tky = cart_link-target-%tky.
+
+          IF sy-subrc = 0 AND cart-CartStatus = 'O'.
+            can_modify = abap_true.
+          ENDIF.
+
+          EXIT.
+        ENDIF.
+
+      ENDLOOP.
+
+      " Enable or disable both update and delete.
+      APPEND VALUE #(
+        %tky = key-%tky
+        %features-%update = COND #(
+          WHEN can_modify = abap_true
+          THEN if_abap_behv=>fc-o-enabled
+          ELSE if_abap_behv=>fc-o-disabled
+        )
+        %features-%delete = COND #(
+          WHEN can_modify = abap_true
+          THEN if_abap_behv=>fc-o-enabled
+          ELSE if_abap_behv=>fc-o-disabled
+        )
+      ) TO result.
 
     ENDLOOP.
 
