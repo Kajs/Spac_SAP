@@ -1,0 +1,14 @@
+unmanaged implementation in class zbp_c_spac103_product_cat_fq unique;
+strict ( 2 );
+
+define behavior for ZC_SPAC103_PRODUCT_CAT_FQ alias Product
+lock master
+authorization master ( none )
+{
+  field ( readonly ) ProductId,
+                   ProductCurrencyCode,
+                   ProductPrice;
+
+  action ( lock: none ) AddToCart
+    parameter ZA_SPAC103_ADD_TO_CART;
+}

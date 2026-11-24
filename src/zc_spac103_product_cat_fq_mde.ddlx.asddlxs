@@ -1,0 +1,54 @@
+@Metadata.layer: #CUSTOMER
+
+@UI: {
+  headerInfo: {
+    typeName: 'Product',
+    typeNamePlural: 'Products',
+    imageUrl: 'ProductImage',
+    title: {
+      type: #STANDARD,
+      value: 'ProductName'
+    },
+    description: {
+      type: #STANDARD,
+      value: 'ProductDescription'
+    }
+  }
+}
+
+annotate entity ZC_SPAC103_PRODUCT_CAT_FQ
+  with
+{
+  @EndUserText.label: 'Product Image'
+  @UI.lineItem: [{ position: 10, importance: #HIGH }]
+  ProductImage;
+
+  @EndUserText.label: 'Product'
+  @UI.lineItem: [
+    { position: 20 },
+    {
+      type: #FOR_ACTION,
+      dataAction: 'AddToCart',
+      label: 'Add to Cart',
+      position: 50
+    }
+  ]
+  ProductName;
+
+  @EndUserText.label: 'Description'
+  @UI.lineItem: [{ position: 30 }]
+  ProductDescription;
+
+  @EndUserText.label: 'Price'
+  @UI.lineItem: [{ position: 40 }]
+  ProductPrice;
+
+  @UI.hidden: false
+  ImageMimeType;
+
+  @UI.hidden: false
+  ImageFileName;
+
+  @UI.hidden: true
+  ProductPriceNullIndicator;
+}

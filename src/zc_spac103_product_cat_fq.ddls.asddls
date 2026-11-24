@@ -1,7 +1,8 @@
 @AccessControl.authorizationCheck: #NOT_REQUIRED
 @EndUserText.label: 'Product catalog with currency filter'
+@Metadata.allowExtensions: true
 
-define view entity ZC_SPAC103_PRODUCT_CAT_FQ
+define root view entity ZC_SPAC103_PRODUCT_CAT_FQ
   as select from ZR_SPAC103_PRODUCT_DD_RWE as Product
 
     cross join ZI_SPAC103_CURRENCY_VH as Currency
