@@ -1,0 +1,15 @@
+{
+  "generationParameters": {
+    "appName": "zspac103_shop",
+    "appTitle": "Webshop",
+    "appNamespace": "",
+    "appDescription": "This application was converted from an SAP Fiori application that was deployed from ADT using the ADT Quick Fiori Application generator.",
+    "ui5Theme": "sap_horizon",
+    "generatorName": "@sap-ux/repo-app-import-sub-generator",
+    "generatorVersion": "1.34.0",
+    "ui5Version": "",
+    "template": "List Report Page V4",
+    "serviceUrl": "https://6449ad14-b137-4a27-8017-6421c2c4f0b0.abap.us10.hana.ondemand.com",
+    "launchText": "To launch the generated application, run the following command from the generated app root folder:\n\n```\n    npm start\n```"
+  }
+}

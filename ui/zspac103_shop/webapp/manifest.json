@@ -1,0 +1,242 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "zspac103_shop",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.0.0",
+      "toolsId": "BA79DFC2C0271FD1BA880B29CC2D856E"
+    },
+    "crossNavigation": {
+      "inbounds": {
+        " Spac103Shop - display ": {
+          "semanticObject": "Spac103Shop ",
+          "action": "display",
+          "title": "Webshop",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_spac103_product_q_o4/srvd/sap/zui_spac103_product_q_sd/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "deviceTypes": {
+      "desktop": true,
+      "phone": true,
+      "tablet": true
+    },
+    "icons": {
+      "favIcon": "",
+      "icon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "technology": "UI5"
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "resources": {
+      "css": []
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "dependencies": {
+      "minUI5Version": "1.151.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {},
+        "sap.fe.macros": {}
+      }
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zspac103_shop.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController#zspac103_shop::ProductByCurrencyList": {
+            "controllerName": "zspac103_shop.ext.productCatalog.ProductByCurrencyListExt"
+          },
+          "sap.fe.templates.ObjectPage.ObjectPageController#zspac103_shop::ShoppingCartObjectPage": {
+            "controllerName": "zspac103_shop.ext.shoppingCart.ShoppingCartObjectPageExt"
+          }
+        }
+      }
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": "ShoppingCart:?query:",
+          "name": "ShoppingCartCustomPage",
+          "target": "ShoppingCartCustomPage"
+        },
+        {
+          "pattern": "ShoppingCart({key}):?query:",
+          "name": "ShoppingCartObjectPage",
+          "target": "ShoppingCartObjectPage"
+        },
+        {
+          "pattern": ":?query:",
+          "name": "ProductByCurrencyList",
+          "target": "ProductByCurrencyList"
+        },
+        {
+          "pattern": "ProductByCurrency({key}):?query:",
+          "name": "ProductByCurrencyObjectPage",
+          "target": "ProductByCurrencyObjectPage"
+        }
+      ],
+      "targets": {
+        "ProductByCurrencyList": {
+          "type": "Component",
+          "id": "ProductByCurrencyList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ProductByCurrency",
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  },
+                  "actions": {
+                    "OpenShoppingCart": {
+                      "press": ".extension.zspac103_shop.ext.productCatalog.ProductByCurrencyListExt.openShoppingCart",
+                      "visible": true,
+                      "enabled": true,
+                      "requiresSelection": false,
+                      "text": "Shopping Cart"
+                    }
+                  }
+                }
+              },
+              "variantManagement": "Page",
+              "navigation": {
+                "ProductByCurrency": {
+                  "detail": {
+                    "route": "ProductByCurrencyObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ProductByCurrencyObjectPage": {
+          "type": "Component",
+          "id": "ProductByCurrencyObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "contextPath": "/ProductByCurrency",
+              "editableHeaderContent": false,
+              "navigation": {},
+              "controlConfiguration": {}
+            }
+          }
+        },
+        "ShoppingCartCustomPage": {
+          "type": "Component",
+          "id": "ShoppingCartCustomPage",
+          "name": "sap.fe.core.fpm",
+          "options": {
+            "settings": {
+              "viewName": "zspac103_shop.ext.shoppingCart.ShoppingCart",
+              "contextPath": "/ShoppingCart",
+              "navigation": {
+                "ShoppingCart": {
+                  "detail": {
+                    "route": "ShoppingCartObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ShoppingCartObjectPage": {
+          "type": "Component",
+          "id": "ShoppingCartObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "contextPath": "/ShoppingCart",
+              "editableHeaderContent": false,
+              "navigation": {},
+              "content": {
+                "header": {
+                  "actions": {
+                    "BackToShoppingCart": {
+                      "press": ".extension.zspac103_shop.ext.shoppingCart.ShoppingCartObjectPageExt.backToShoppingCart",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "Back to Cart Overview"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "archeType": "transactional",
+    "registrationIds": []
+  }
+}
+

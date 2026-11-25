@@ -1,0 +1,30 @@
+
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:macros="sap.fe.macros"
+    controllerName="zspac103_shop.ext.shoppingCart.ShoppingCart"
+    height="100%">
+
+    <Page
+        id="ShoppingCartPage"
+        title="Shopping Cart">
+
+        <headerContent>
+            <Button
+                text="Product Catalog"
+                type="Transparent"
+                press="onBackToProductCatalog" />
+        </headerContent>
+
+        <content>
+            <macros:Table
+                id="ShoppingCartTable"
+                contextPath="/ShoppingCart"
+                metaPath="@com.sap.vocabularies.UI.v1.LineItem"
+                initialLoad="true" />
+        </content>
+
+    </Page>
+
+</mvc:View>
