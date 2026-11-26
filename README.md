@@ -15,6 +15,8 @@ The project is divided into two main parts:
 - **Backend (`src/`)** – Database tables, CDS views, RAP Business Objects, ABAP classes and OData services.
 - **Frontend (`ui/`)** – A custom SAPUI5 application for browsing products and managing shopping carts.
 
+The custom ui was added to include buttons to navigate between the webshop, list of shopping carts and shopping carts. The webshop and shopping carts can still be used through the Fiori apps, if the user keeps the webshop in one browser tab, the shopping carts in another and manually switches between them as needed.
+
 ### Main Features
 
 - Product catalog with product images and descriptions.
